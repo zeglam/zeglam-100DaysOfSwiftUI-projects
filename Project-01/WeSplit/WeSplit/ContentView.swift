@@ -12,7 +12,12 @@ struct ContentView: View {
     @State private var numberOfPeople = 2
     @State private var tipPercentage = 20
     @FocusState private var amountISFocused: Bool
-    let tipPercentages = [0, 5, 10, 15, 20, 25]
+    //let tipPercentages = [0, 5, 10, 15, 20, 25]
+    
+    var currencyFormat: FloatingPointFormatStyle<Double>.Currency {
+        let currencyCode = Locale.current.currencyCode ?? "USD"
+        return FloatingPointFormatStyle<Double>.Currency(code: currencyCode)
+    }
     
     var totalPerPerson: Double {
         let peopleCount = Double(numberOfPeople + 2)
@@ -23,11 +28,15 @@ struct ContentView: View {
         return amountPerPerson
     }
     
+    var totalAmount: Double {
+        return checkAmount + checkAmount * Double(tipPercentage) / 100
+        }
+    
     var body: some View {
         NavigationView {
             Form {
                 Section {
-                    TextField("Amount", value: $checkAmount, format: .currency(code: Locale.current.currencyCode ?? "USD"))
+                    TextField("Amount", value: $checkAmount, format: currencyFormat)
                         .keyboardType(.decimalPad)
                         .focused($amountISFocused)
                 
@@ -36,19 +45,29 @@ struct ContentView: View {
                             Text("\($0) people")
                         }
                     }
+                } header: {
+                    Text("Enter check amount and number of people: ")
                 }
                 Section {
                     Picker("Tip Percentage", selection: $tipPercentage) {
-                        ForEach(tipPercentages, id: \.self) {
+                        ForEach(0...100, id: \.self) {
                             Text($0, format: .percent)
                         }
                     }
-                    .pickerStyle(.segmented)
+                    .pickerStyle(.wheel)
                 } header: {
                     Text("Choose tip percentage: ")
                 }
                 Section {
-                    Text(totalPerPerson, format: .currency(code: Locale.current.currencyCode ?? "USD"))
+                    Text(totalPerPerson, format: currencyFormat)
+                } header: {
+                        Text("Amount per person: ")
+                    }
+                Section {
+                    Text(totalAmount, format: currencyFormat)
+                } header: {
+                        Text("Total amount of check: ")
+                    }
                 }
             }
             .navigationTitle("WeSplit")
@@ -62,7 +81,6 @@ struct ContentView: View {
             }
         }
     }
-}
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
