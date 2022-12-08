@@ -9,8 +9,12 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var showingScore = false
-    @State private var scoreTitle = ""
+    @State private var showingScore = false //for post answer alert (right or wrong)
+    @State private var endOfGame = false //for end of game alert after 8 questions
+    @State private var scoreTitle = "" //to print correct/wrong in post answer alert
+    let endOfGameTitle = "Finished" //to print end of game message
+    
+    @State private var counter = 1 //counts questions
     
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
     
@@ -68,21 +72,39 @@ struct ContentView: View {
         } message: {
             Text("Your score is: \(currentScore)")
         }
+        
+        .alert(endOfGameTitle, isPresented: $endOfGame){
+            Button("Restart", action: reset)
+        } message: {
+            Text("Your final score is \(currentScore)/8")
+        }
     }
     func flagTapped(_ number: Int) {
         if number == correctAnswer {
             scoreTitle = "Correct"
             currentScore += 1
         } else {
-            scoreTitle = "Wrong"
+            scoreTitle = "Wrong, this is the flag of \(countries[number])"
         }
         
+        counter += 1
         showingScore = true
+        
+        if counter > 8 {
+            endOfGame = true
+        }
     }
     
     func askQuestion() {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+    }
+    
+    func reset() {
+        counter = 1
+        correctAnswer = Int.random(in: 0...2)
+        currentScore = 0
+        countries.shuffle()
     }
 }
 
