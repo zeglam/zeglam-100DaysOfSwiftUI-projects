@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         Text("Hello, world!")
+            .promTitleStyle()
             .padding()
             .background(.red)
             .padding()
@@ -18,20 +19,25 @@ struct ContentView: View {
             .background(.green)
             .padding()
             .background(.yellow)
-        
-        VStack {
-            Text("Gryffindor")
-                .font(.largeTitle)
-            Text("Hufflepuff")
-            Text("Ravenclaw")
-            Text("Slytherin")
-        }
-        .font(.title)
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+struct PromTitle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.largeTitle)
+            .foregroundColor(.blue)
+    }
+}
+
+extension View {
+    func promTitleStyle() -> some View {
+        modifier(PromTitle())
     }
 }
