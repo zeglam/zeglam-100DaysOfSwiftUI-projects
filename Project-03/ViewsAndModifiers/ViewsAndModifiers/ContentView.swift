@@ -12,13 +12,17 @@ struct ContentView: View {
         Text("Hello, world!")
             .promTitleStyle()
             .padding()
-            .background(.red)
+            .background(.orange)
             .padding()
-            .background(.blue)
+            .background(.purple)
             .padding()
-            .background(.green)
+            .background(.orange)
             .padding()
-            .background(.yellow)
+            .background(.purple)
+            .padding()
+            .background(.orange)
+            .padding()
+            .background(.purple)
     }
 }
 
