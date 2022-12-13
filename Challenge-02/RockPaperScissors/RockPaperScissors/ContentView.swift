@@ -44,23 +44,66 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
+            LinearGradient(colors: [.mint, .gray], startPoint: .top, endPoint: .bottom)
+            
+            Spacer()
+            
             VStack {
+                
+                Spacer()
+                
                 Text("Rock Paper Scissors")
+                    .font(.largeTitle.weight(.heavy))
+                    .foregroundColor(.primary)
+                    .padding()
+                                
                 Text("The machine has chosen:")
+                    .font(.title2)
+                    .foregroundColor(.primary)
+                    .padding()
+                
                 Image(systemName: machineHand)
+                    .font(.largeTitle.weight(.thin))
+                    .foregroundColor(.primary)
+                
                 Text("And it wants you to:")
+                    .font(.title2)
+                    .foregroundColor(.primary)
+                    .padding()
+                
                 Text(desiredOutcome ? "Win" : "Lose")
+                    .font(.title2.weight(.semibold))
+                    .foregroundColor(.primary)
+                    .padding()
+                                
+                Text("Choose your hand:")
+                    .font(.title2)
+                    .foregroundColor(.primary)
+                    .padding()
                 
                 HStack {
+                    Spacer()
                     ForEach(0..<3) { number in
                         Button {
                             handPicked(number)
                         } label: {
                             HandImage(handNum: number)
                         }
+                        Spacer()
                     }
                 }
+                
+                Spacer()
+                
+                Text("Your score is \(currentScore)")
+                    .font(.title2)
+                    .foregroundColor(.primary)
+                    .padding()
             }
+            .padding(.vertical)
+            .background(.thinMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            
         }
         .alert("Round Result", isPresented: $showingScore) {
             Button("Countinue", action: anotherRound)
@@ -128,19 +171,16 @@ struct HandImage: View {
     var body: some View {
         if handNum == 0 {
             Image(systemName: "square.fill")
-            .renderingMode(.original )
-            .clipShape(Capsule())
-            .shadow(radius: 9)
+                .font(.largeTitle.weight(.thin))
+                .foregroundColor(.red)
         } else if handNum == 1 {
             Image(systemName: "paperplane")
-            .renderingMode(.original )
-            .clipShape(Capsule())
-            .shadow(radius: 9)
+                .font(.largeTitle.weight(.thin))
+                .foregroundColor(.red)
         } else if handNum == 2 {
             Image(systemName: "scissors")
-            .renderingMode(.original )
-            .clipShape(Capsule())
-            .shadow(radius: 9)
+                .font(.largeTitle.weight(.thin))
+                .foregroundColor(.red)
         }
     }
 }
