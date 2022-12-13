@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    let handList = ["Rock", "Paper", "Scissors"].shuffled()
+    @State private var handList = ["Rock", "Paper", "Scissors"].shuffled()
     @State private var desiredOutcome = Bool.random() //true=win, false=lose
     @State private var playerHand = ""
     @State private var roundCounter = 1
@@ -43,7 +43,6 @@ struct ContentView: View {
     }
     
     var body: some View {
-        
         ZStack {
             VStack {
                 Text("Rock Paper Scissors")
@@ -63,11 +62,37 @@ struct ContentView: View {
                 }
             }
         }
+        .alert("Round Result", isPresented: $showingScore) {
+            Button("Countinue", action: anotherRound)
+        } message: {
+            Text("Your score is: \(currentScore)")
+        }
+                
+        .alert("Game Finished", isPresented: $endOfGame){
+            Button("Restart", action: reset)
+        } message: {
+            Text("Your final score is \(currentScore)/10")
+        }
+        
     }
     
     func handPicked(_ handNumber: Int) {
-        if handNumber == machineHandNumber {
+        if (machineHandNumber == handNumber) {
+            currentScore -= 1
+        } else if (machineHandNumber == 0) && (handNumber == 1) && (desiredOutcome == true) {
             currentScore += 1
+        } else if (machineHandNumber == 1) && (handNumber == 2) && (desiredOutcome == true) {
+            currentScore += 1
+        } else if (machineHandNumber == 2) && (handNumber == 0) && (desiredOutcome == true) {
+            currentScore += 1
+        } else if (machineHandNumber == 0) && (handNumber == 2) && (desiredOutcome == false) {
+            currentScore += 1
+        } else if (machineHandNumber == 1) && (handNumber == 0) && (desiredOutcome == false) {
+            currentScore += 1
+        } else if (machineHandNumber == 2) && (handNumber == 1) && (desiredOutcome == false) {
+            currentScore += 1
+        } else {
+            currentScore -= 1
         }
         roundCounter += 1
         showingScore = true
@@ -77,6 +102,18 @@ struct ContentView: View {
         }
     }
     
+    func anotherRound() {
+        handList.shuffle()
+        desiredOutcome = Bool.random()
+    }
+    
+    func reset() {
+        roundCounter = 1
+        currentScore = 0
+        finalScore = 0
+        handList.shuffle()
+        desiredOutcome = Bool.random()
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
@@ -107,3 +144,4 @@ struct HandImage: View {
         }
     }
 }
+
