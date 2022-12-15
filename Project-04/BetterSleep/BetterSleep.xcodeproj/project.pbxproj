@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		486FD41C294B6E7F0090E667 /* SleepCalculator.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 486FD41B294B6E7F0090E667 /* SleepCalculator.mlmodel */; };
 		48B809BC294A306F00DE48AF /* BetterSleepApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B809BB294A306F00DE48AF /* BetterSleepApp.swift */; };
 		48B809BE294A306F00DE48AF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B809BD294A306F00DE48AF /* ContentView.swift */; };
 		48B809C0294A307200DE48AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48B809BF294A307200DE48AF /* Assets.xcassets */; };
@@ -14,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		486FD41B294B6E7F0090E667 /* SleepCalculator.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = SleepCalculator.mlmodel; path = ../../SleepCalculator.mlmodel; sourceTree = "<group>"; };
 		48B809B8294A306F00DE48AF /* BetterSleep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BetterSleep.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		48B809BB294A306F00DE48AF /* BetterSleepApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetterSleepApp.swift; sourceTree = "<group>"; };
 		48B809BD294A306F00DE48AF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -53,6 +55,7 @@
 			children = (
 				48B809BB294A306F00DE48AF /* BetterSleepApp.swift */,
 				48B809BD294A306F00DE48AF /* ContentView.swift */,
+				486FD41B294B6E7F0090E667 /* SleepCalculator.mlmodel */,
 				48B809BF294A307200DE48AF /* Assets.xcassets */,
 				48B809C1294A307200DE48AF /* Preview Content */,
 			);
@@ -137,6 +140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				486FD41C294B6E7F0090E667 /* SleepCalculator.mlmodel in Sources */,
 				48B809BE294A306F00DE48AF /* ContentView.swift in Sources */,
 				48B809BC294A306F00DE48AF /* BetterSleepApp.swift in Sources */,
 			);
