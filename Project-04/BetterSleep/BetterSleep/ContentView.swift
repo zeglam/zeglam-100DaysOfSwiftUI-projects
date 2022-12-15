@@ -11,40 +11,44 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var sleepAmount = 8.0
-    @State private var wakeUp = Date.now
+    @State private var wakeUp = defultWakeTime
     @State private var coffeeAmount = 1
     
     @State private var alertTitle = ""
     @State private var alertMeassage = ""
     @State private var showAlert = false
     
+    static var defultWakeTime: Date {
+        var components = DateComponents()
+        components.hour = 7
+        components.minute = 30
+        return Calendar.current.date(from: components) ?? Date.now
+    } //static makes prop belongs to struct not instances, so we can use it to calculate other struct props like wakeUp above
+    
     var body: some View {
         NavigationView {
-            VStack {
-                Spacer()
+            Form {
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("When do you want to wake up?")
+                        .font(.headline)
+                    
+                    DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute)
+                        .labelsHidden()
+                }
                 
-                Text("When do you want to wake up?")
-                    .font(.headline)
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("What is your desired amount of sleep?")
+                        .font(.headline)
+                    
+                    Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25)
+                }
                 
-                DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute)
-                    .labelsHidden()
-                
-                Spacer()
-                
-                Text("What is your desired amount of sleep?")
-                    .font(.headline)
-                
-                Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25)
-
-                
-                Spacer()
-                
-                Text("How many cups of coffee will you drink today?")
-                    .font(.headline)
-                
-                Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount.formatted()) cups", value: $coffeeAmount, in: 0...20)
-                
-                Spacer()
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("How many cups of coffee will you drink today?")
+                        .font(.headline)
+                    
+                    Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount.formatted()) cups", value: $coffeeAmount, in: 0...20)
+                }
             }
             .navigationTitle("Better Rest")
             .toolbar {
