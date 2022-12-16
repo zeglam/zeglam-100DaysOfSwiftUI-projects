@@ -44,10 +44,6 @@ struct ContentView: View {
                 }
                 
                 Section {
-                    //Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount.formatted()) cups", value: $coffeeAmount, in: 0...20)
-                    
-                    //here we replacd a Stepper with a Picker as part of a challange
-                    
                     Picker(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount.formatted()) cups", selection: $coffeeAmount){
                         ForEach(0...20, id: \.self) {
                             Text($0, format: .number)
@@ -58,38 +54,39 @@ struct ContentView: View {
                     Text("How many cups of coffee will you drink today?")
                         .font(.headline)
                 }
+                
+                Section {
+                    Text("\(calculateBedTime)")
+                        .font(.largeTitle)
+                } header: {
+                    Text("Recommended time to sleep is")
+                        .font(.headline)
+                }
             }
             .navigationTitle("Better Rest")
-            .toolbar {
-                Button("Calculate", action: calculateBedTime)
-            }
-            .alert(alertTitle, isPresented: $showAlert) {
-                Button("OK") {}
-            } message: {
-                Text(alertMeassage)
-            }
         }
     }
-    func calculateBedTime() {
+    //for challenge 3, we need to change calculateBedTime from a func to a calculated var, so it can be used inside our layout view
+    var calculateBedTime: String {
+        let model = try! SleepCalculator(configuration: MLModelConfiguration())
+        let components = Calendar.current.dateComponents([.hour, .minute], from: wakeUp)
+        let hour = 60 * 60 * (components.hour ?? 0)
+        let minutes = 60 * (components.minute ?? 0)
+        
+        var message: String
         do {
-            let config = MLModelConfiguration()
-            let model = try SleepCalculator(configuration: config)
-            
-            let components = Calendar.current.dateComponents([.hour, .minute], from: wakeUp) //extract hours and minutes from wakeUp time
-            let hour = 60 * 60 * (components.hour ?? 0) //it returns an optional Int, then we transform it into seconds
-            let minutes = 60 * (components.minute ?? 0)
-            
             let prediction = try model.prediction(wake: Double(hour + minutes), estimatedSleep: sleepAmount, coffee: Double(coffeeAmount))
             
-            let sleepTime = wakeUp - prediction.actualSleep //this subtracts actualSleep in seconds from wakeUp which is a date
-            alertTitle = "Your ideal bed time is:"
-            alertMeassage = sleepTime.formatted(date: .omitted, time: .shortened)
+            let sleepTime = wakeUp - prediction.actualSleep
             
+            let tempFormatter = DateFormatter()
+            tempFormatter.timeStyle = .short
+            
+            message = tempFormatter.string(from: sleepTime)
         } catch {
-            alertTitle = "Error"
-            alertMeassage = "Something went wrong! Try again later."
+            message = "Error"
         }
-        showAlert = true
+        return message
     }
 }
 
