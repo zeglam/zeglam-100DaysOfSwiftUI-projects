@@ -28,26 +28,33 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             Form {
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("When do you want to wake up?")
-                        .font(.headline)
-                    
+                Section {
                     DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute)
                         .labelsHidden()
+                } header: {
+                    Text("When do you want to wake up?")
+                        .font(.headline)
                 }
                 
-                VStack(alignment: .leading, spacing: 0) {
+                Section {
+                    Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25)
+                } header: {
                     Text("What is your desired amount of sleep?")
                         .font(.headline)
-                    
-                    Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25)
                 }
                 
-                VStack(alignment: .leading, spacing: 0) {
+                Section {
+                    //Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount.formatted()) cups", value: $coffeeAmount, in: 0...20)
+                    //here we replacd a Stepper with a Picker as part of a challange
+                    Picker(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount.formatted()) cups", selection: $coffeeAmount){
+                        ForEach(0...20, id: \.self) {
+                            Text($0, format: .number)
+                        }
+                    }
+                    .pickerStyle(.wheel)
+                } header: {
                     Text("How many cups of coffee will you drink today?")
                         .font(.headline)
-                    
-                    Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount.formatted()) cups", value: $coffeeAmount, in: 0...20)
                 }
             }
             .navigationTitle("Better Rest")
