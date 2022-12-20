@@ -45,8 +45,9 @@ struct ContentView: View {
         }
     }
     func addNewWord() {
-        let answer = newWord.lowercased() .trimmingCharacters(in:  .whitespacesAndNewlines)
-        guard answer.count > 0 else { return }
+        let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+        guard answer.count > 2 else { return } //only allwo answers with >2 letters
+        guard answer != rootWord else { return } //disallow using root word as an answer
         guard isOriginal(word: answer) else {
             wordError(title: "Word used already!", message: "Try a new word.")
             return
