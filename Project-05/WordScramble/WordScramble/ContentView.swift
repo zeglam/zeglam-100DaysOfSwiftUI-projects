@@ -32,6 +32,7 @@ struct ContentView: View {
             }
             .navigationTitle(rootWord)
             .onSubmit(addNewWord) //onSubmit means when user presses return
+            .onAppear(perform: startGame) //run startGame when loading layout
         }
     }
     func addNewWord() {
@@ -40,8 +41,21 @@ struct ContentView: View {
         
         withAnimation {
             usedWords.insert(answer, at: 0)
-        } 
+        }
         newWord = ""
+    }
+    
+    func startGame() {
+        //asking swiftUI for Url for our start file on the app
+        if let startWordsURL = Bundle.main.url(forResource: "start", withExtension: "txt") {
+            if let startWords = try? String(contentsOf: startWordsURL) {
+                let allWords = startWords.components(separatedBy: "\n")
+                rootWord = allWords.randomElement() ?? "SILKWORD"
+                return
+            }
+        }
+        //here we will take care of cases of txt file not found or not loading
+        fatalError("Could not load start.txt from bundle")
     }
 }
 
