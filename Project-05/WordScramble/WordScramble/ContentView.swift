@@ -17,6 +17,8 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showError = false
     
+    @State private var score = 0
+    
     var body: some View {
         NavigationView {
             List {
@@ -26,6 +28,10 @@ struct ContentView: View {
                 }
                 
                 Section {
+                    Text("Score: \(score)")
+                }
+                
+                Section("Used words list") {
                     ForEach(usedWords, id: \.self) { word in
                         HStack {
                             Image(systemName: "\(word.count).circle")
@@ -66,11 +72,15 @@ struct ContentView: View {
         
         withAnimation {
             usedWords.insert(answer, at: 0)
+        
         }
+        score += newWord.count
         newWord = ""
     }
     
     func startGame() {
+        score = 0
+        usedWords.removeAll()
         //asking swiftUI for Url for our start file on the app
         if let startWordsURL = Bundle.main.url(forResource: "start", withExtension: "txt") {
             if let startWords = try? String(contentsOf: startWordsURL) {
