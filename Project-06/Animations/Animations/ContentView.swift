@@ -9,22 +9,24 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var animationFactor = 1.0
+    @State private var animationFactor = 0.0
     
     var body: some View {
         VStack {
-            Stepper("Scale Amount", value: $animationFactor.animation(), in: 1...10)
-            
-            Spacer()
-            
             Button("Tape Me") {
-                animationFactor += 1
+                withAnimation{
+                    animationFactor += 360.0
+                }
             }
-            .padding(30)
-            .background(.blue)
-            .foregroundColor(.orange)
+            .padding(70)
+            .background(.orange)
+            .foregroundColor(.teal)
+            .font(.largeTitle)
             .clipShape(Circle())
-            .scaleEffect(animationFactor)
+            .rotation3DEffect(
+                .degrees(animationFactor),
+                axis: (x: 0, y: 0.5, z: 0.5)
+            )
         }
     }
 }
