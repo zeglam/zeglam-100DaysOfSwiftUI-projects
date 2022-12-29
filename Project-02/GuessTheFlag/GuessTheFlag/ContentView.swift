@@ -22,6 +22,9 @@ struct ContentView: View {
     
     @State private var currentScore: Int = 0
     
+    @State private var selectedFalgRotate: Int = 5 //arbt value for the selected flag (when run it should take values between 0 and 2, used for rotating animation
+    @State private var selectedFalgFade: Int = 5 //arbt value for the selected flag (when run it should take values between 0 and 2, used for fading animation
+    
     var body: some View {
         ZStack {
             LinearGradient(colors: [.blue, .orange], startPoint: .top, endPoint: .bottom)
@@ -46,6 +49,12 @@ struct ContentView: View {
                             flagTapped(number)
                         } label: {
                             FlagImage(flagName: countries[number])
+                                .rotation3DEffect(
+                                    .degrees(selectedFalgRotate == number ? 360 : 0),
+                                    axis: (x: 0, y: 1, z: 0))
+                                .animation(.default, value: selectedFalgRotate)
+                                .opacity(selectedFalgFade == 5 || selectedFalgFade == number ? 1.0 : 0.25)
+                                .animation(.default, value: selectedFalgFade) //applies the 3d rotation effect when value is changed
                         }
                     }
                 }
@@ -80,12 +89,14 @@ struct ContentView: View {
         if number == correctAnswer {
             scoreTitle = "Correct"
             currentScore += 1
+            selectedFalgRotate = number //here to apply rotation effect only if answer was correct 
         } else {
             scoreTitle = "Wrong, this is the flag of \(countries[number])"
         }
         
         counter += 1
         showingScore = true
+        selectedFalgFade = number //here not inside if statement, to make fading effect wither we answered correctly or wrong
         
         if counter > 8 {
             endOfGame = true
@@ -95,6 +106,7 @@ struct ContentView: View {
     func askQuestion() {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+        selectedFalgFade = 5 //tp remove fading effect when a new answer show up
     }
     
     func reset() {
@@ -102,6 +114,8 @@ struct ContentView: View {
         correctAnswer = Int.random(in: 0...2)
         currentScore = 0
         countries.shuffle()
+        selectedFalgRotate = 5
+        selectedFalgFade = 5
     }
 }
 
