@@ -23,7 +23,7 @@ struct ContentView: View {
     @State private var currentScore: Int = 0
     
     @State private var selectedFalgRotate: Int = 5 //arbt value for the selected flag (when run it should take values between 0 and 2, used for rotating animation
-    @State private var selectedFalgFade: Int = 5 //arbt value for the selected flag (when run it should take values between 0 and 2, used for fading animation
+    @State private var selectedFalgFade: Int = 5 //arbt value for the selected flag (when run it should take values between 0 and 2, used for fading and scalling animations
     
     var body: some View {
         ZStack {
@@ -54,6 +54,7 @@ struct ContentView: View {
                                     axis: (x: 0, y: 1, z: 0))
                                 .animation(.default, value: selectedFalgRotate)
                                 .opacity(selectedFalgFade == 5 || selectedFalgFade == number ? 1.0 : 0.25)
+                                .scaleEffect(selectedFalgFade == 5 || selectedFalgFade == number ? 1.0 : 0.7)
                                 .animation(.default, value: selectedFalgFade) //applies the 3d rotation effect when value is changed
                         }
                     }
@@ -89,7 +90,7 @@ struct ContentView: View {
         if number == correctAnswer {
             scoreTitle = "Correct"
             currentScore += 1
-            selectedFalgRotate = number //here to apply rotation effect only if answer was correct 
+            selectedFalgRotate = number //here to apply rotation effect only if answer was correct
         } else {
             scoreTitle = "Wrong, this is the flag of \(countries[number])"
         }
