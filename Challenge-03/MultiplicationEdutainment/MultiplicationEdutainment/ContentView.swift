@@ -12,13 +12,19 @@ struct ContentView: View {
     //gameOn: true if player is playing, false if player setting up game
     @State private var gameON = false
     //list of all mumbers concidered in the game, may not be needed
-    @State private var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    //@State private var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     @State private var firstNumber = 1
-    @State private var secondNumber = 1
+    //@State private var secondNumber = 1
     @State private var userAnswer = 0
     //number of queastions player will choose
     @State private var numberOfQuestions = 5
     @State private var questionList: [Question] = []
+    @State private var currentScore: Int = 0
+    
+    @State private var scoreTitle = "" //for post answer alert
+    @State private var endOfGameTitle = "Finished👍" //for end of game alert
+    @State private var showScore = false //to show post answer alert
+    @State private var endOfGame = false //to show end of game alert
     
     var body: some View {
         ZStack {
@@ -73,17 +79,34 @@ struct ContentView: View {
                 VStack {
                     Text("Give the correct answer")
                     
-                    HStack {
-                        ForEach(0..<questionList.count, id: \.self) { question in
-                            Text("\(firstNumber)")
-                            Text("X")
-                            Text("\(questionList[question].num2)")
+                    ForEach(0..<questionList.count, id: \.self) { question in
+                        VStack {
+                            HStack {
+                                Text("\(questionList[question].num1)")
+                                Text("X")
+                                Text("\(questionList[question].num2)")
+                            }
+                            
+                            TextField("Your Answer", value: $userAnswer, format: .number)
+                                .keyboardType(.numberPad)
+                            
+                            Button("Submit") {
+                                if userAnswer == questionList[question].result {
+                                    scoreTitle = "Correct"
+                                    currentScore += 1
+                                } else {
+                                    scoreTitle = "Wrong, The correct answer is \(questionList[question].result)"
+                                }
+                                showScore = true
+                            }
                         }
                     }
                 }
             }
         }
-        
+        .alert(showScore, isPresented: $showScore) {
+            Button("Next question")
+        }
     }
     
     //this func creates a list of questions in form of an array of Question struct we created below, each instance has 3 numbers, first is the table choosen by user, second is a random number from 1 to 12, third is multiplication of first and second numbers. This func should be called once the user hits play button.
@@ -102,6 +125,9 @@ struct ContentView: View {
 struct Question {
     var num1: Int
     var num2: Int
+    var result : Int {
+        num1 * num2
+    }
     var questionText: String {
         return "\(num1) X \(num2) = \(num1 * num2)"
     }
